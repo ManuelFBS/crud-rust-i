@@ -1,28 +1,37 @@
-use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
+use actix_web::{web, App, HttpRequest, HttpResponse, HttpServer, Responder};
+use core::sync::atomic::AtomicU16;
+use core::sync::atomic::Ordering;
+use std::sync::Arc;
 
-#[get("/")]
-async fn hello() -> impl Responder {
-    HttpResponse::Ok().body("Hello World !!!")
+async fn greet(req: HttpRequest) -> impl Responder {
+    let name = req.match_info().get("name").unwrap_or("World");
+    format!("Hello {} !!!", &name)
 }
 
-#[post("/echo")]
-async fn echo(req_body: String) -> impl Responder {
-    HttpResponse::Ok().body(req_body)
-}
-
-async fn manual_hello() -> impl Responder {
-    HttpResponse::Ok().body("Hey there !!!")
+async fn health_check(thread_index: u16) -> HttpResponse {
+    HttpResponse::Ok()
+        .append_header(("thread-id", thread_index.to_string()))
+        .finish()
 }
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    HttpServer::new(|| {
+    //
+    println!("Starting the server...");
+    let thread_counter = Arc::new(AtomicU16::new(1));
+    HttpServer::new(move || {
+        println!(
+            "Starting the thread: {}",
+            thread_counter.fetch_add(1, Ordering::SeqCst)
+        );
+        let thread_index = thread_counter.load(Ordering::SeqCst);
         App::new()
-            .service(hello)
-            .service(echo)
-            .route("/hey", web::get().to(manual_hello))
+            .route("/", web::get().to(greet))
+            .route("/health", web::get().to(move || health_check(thread_index)))
+            .route("/str", web::get().to(|| async { "Hello Rust" }))
+            .route("/{name}", web::get().to(greet))
     })
-    .bind(("localhost", 8000))?
+    .bind(("localhost", 8085))?
     .run()
     .await
 }

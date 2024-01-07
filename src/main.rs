@@ -1,3 +1,6 @@
+mod repository;
+mod user;
+
 use actix_web::{web, App, HttpRequest, HttpResponse, HttpServer, Responder};
 
 async fn greet(req: HttpRequest) -> impl Responder {

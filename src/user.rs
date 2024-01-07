@@ -10,7 +10,17 @@ pub struct User {
 }
 
 impl User {
-    pub fn new(name: String, birth_date_ymd: (u32, u32, u32));
+    pub fn new(name: String, birth_date_ymd: (u32, u32, u32)) -> Self {
+        let (year, month, day) = birth_date;
+        Self {
+            id: uuid::Uuid::new_v4(),
+            name,
+            birth_date: NaiveDate::from_ymd(year, month, day),
+            custom_data: CustomData { random: 1 },
+            created_at: Some(Utc::now()),
+            updated_at: None,
+        }
+    }
 }
 
 pub struct CustomData {

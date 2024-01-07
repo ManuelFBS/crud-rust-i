@@ -9,6 +9,10 @@ pub struct User {
     pub updated_at: Option<DateTime<Utc>>,
 }
 
+impl User {
+    pub fn new(name: String, birth_date_ymd: (u32, u32, u32));
+}
+
 pub struct CustomData {
     pub random: u32,
 }

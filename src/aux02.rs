@@ -16,9 +16,6 @@ async fn health_check(thread_index: u16) -> HttpResponse {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    // dotenv::dotenv().ok();
-    // let port = std::env::var("PORT").unwrap_or("8085".to_string());
-
     println!("Starting the server...");
     let thread_counter = Arc::new(AtomicU16::new(1));
     HttpServer::new(move || {

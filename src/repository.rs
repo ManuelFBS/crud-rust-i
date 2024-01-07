@@ -5,13 +5,13 @@ pub trait Repository {
 }
 
 pub struct MemoryRepository {
-    user: Vec<User>,
+    users: Vec<User>,
 }
 
 impl Default for MemoryRepository {
     fn default() -> Self {
         Self {
-            users: vec![User::new("Manuel", (1962, 03, 04))],
+            users: vec![User::new("Manuel".to_string(), (1962, 03, 04))],
         }
     }
 }

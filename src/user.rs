@@ -10,8 +10,8 @@ pub struct User {
 }
 
 impl User {
-    pub fn new(name: String, birth_date_ymd: (u32, u32, u32)) -> Self {
-        let (year, month, day) = birth_date;
+    pub fn new(name: String, birth_date_ymd: (i32, u32, u32)) -> Self {
+        let (year, month, day) = birth_date_ymd;
         Self {
             id: uuid::Uuid::new_v4(),
             name,

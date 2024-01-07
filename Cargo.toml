@@ -9,3 +9,4 @@ edition = "2021"
 actix-web = "4"
 dotenv = "0.15.0"
 uuid = { version = "1.6.0", features = ["serde", "v4"] }
+chrono = { version = "0.4.31", features = ["serde"] }
